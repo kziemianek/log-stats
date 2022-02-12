@@ -5,7 +5,6 @@ use serde::Deserialize;
 /// Represents log message
 #[derive(Deserialize, Debug)]
 pub struct Message<'a> {
-    // this is mandatory, what should we do if it's missing ?
     #[serde(alias = "type")]
     pub message_type: &'a str,
 }
@@ -24,7 +23,7 @@ impl MessageStats {
     }
 }
 
-/// Represents stats of messages with given type and not classified ones
+/// Represents stats of messages with given type or not classified ones
 #[derive(Default)]
 pub struct AggregatedTypeStats {
     pub stats: HashMap<String, MessageStats>,
@@ -65,7 +64,7 @@ impl Display for AggregatedTypeStats {
         if self.not_classified.messages_count > 0 {
             write!(
                 f,
-                "*** There were {} not counted messages with {} total size in bytes ***",
+                "*** There were {} not classified messages with {} total size in bytes ***",
                 self.not_classified.messages_count, self.not_classified.messages_total_size
             )?;
         }
